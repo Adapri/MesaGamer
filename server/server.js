@@ -14,6 +14,19 @@ app.get('/', (req, res) => {
 })
 
 app.get('/tictactoe', (req, res) => {
+  const { player } = req.query
+
+  if (player) {
+    const filteredGames = tictactoe.filter(game => {
+      const playerXName = game.players.playerX.name.toLowerCase()
+      const playerOName = game.players.playerO.name.toLowerCase()
+      const playerNameToFindLower = player.toLowerCase()
+
+      return playerXName === playerNameToFindLower || playerOName === playerNameToFindLower
+    })
+
+    return res.json(filteredGames)
+  }
   res.json(tictactoe)
 })
 

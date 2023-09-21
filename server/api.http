@@ -3,7 +3,8 @@ GET http://localhost:3000/tictactoe
 
 ### Recuperar partida de tictactoe con un id
 GET http://localhost:3000/tictactoe/1
+
 ### Recuperar partida de tictactoe de un jugador
-GET http://localhost:3000/tictactoe/adapri
+GET http://localhost:3000/tictactoe?player=iban
 
 
