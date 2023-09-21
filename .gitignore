@@ -1,0 +1,44 @@
+# Ignorar directorios generados por npm
+node_modules/
+dist/
+
+# Ignorar archivos de configuración
+.env
+.env.local
+.env.*.local
+
+# Ignorar archivos de registro y archivos temporales
+*.log
+*.tmp
+
+# Ignorar archivos de respaldo
+*.bak
+*.swp
+
+# Ignorar archivos de construcción de aplicaciones front-end
+/build/
+/.sass-cache/
+
+# Ignorar archivos de configuración específicos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos de dependencias de desarrollo de TypeScript
+*.tsbuildinfo
+
+# Ignorar archivos de caché de eslint
+.eslintcache
+
+# Ignorar archivos de configuración de Visual Studio Code
+.vscode/
+
+# Ignorar archivos generados por IDEs o editores de código
+.idea/
+*.suo
+*.ntvs*
+
+# Ignorar archivos generados por compiladores de TypeScript
+*.js.map
+
+# Ignorar archivos generados por las pruebas
+coverage/
