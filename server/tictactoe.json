@@ -1,15 +1,8 @@
 [{
     "id": "1",
-    "players": {
-      "playerX": {
-        "name": "adapri",
-        "symbol": "X"
-      },
-      "playerO": {
-        "name": "mily",
-        "symbol": "O"
-      }
-    },
+    "type": "online",
+    "playerX": "adapri",  
+    "playerO": "mily",
     "board": [
       ["X", "", "O"],
       ["O", "X", "X"],
@@ -28,49 +21,30 @@
   },
   {
     "id": "2",
-    "players": {
-      "playerX": {
-        "name": "iban",
-        "symbol": "X"
-      },
-      "playerO": {
-        "name": "pablo",
-        "symbol": "O"
-      }
-    },
-    "board": [
-      ["X", "", "O"],
-      ["O", "X", "X"],
-      ["O", "X", "O"]
-    ],
-    "moves": [
-      {"player": "iban", "row": 0, "col": 0},
-      {"player": "pablo", "row": 1, "col": 0}
-    ],
-    "winner": null
-  },
-
-  {
-    "id": "3",
-    "players": {
-      "playerX": {
-        "name": "dan heng",
-        "symbol": "X"
-      },
-      "playerO": {
-        "name": "lucoha",
-        "symbol": "O"
-      }
-    },
+    "type": "IA",
+    "playerX": "rojano",  
+    "playerO": "IA",
     "board": [
       ["X", "", ""],
       ["", "", ""],
       ["", "", ""]
     ],
     "moves": [
-      {"player": "dan heng", "row": 0, "col": 0}
-
+      {"player": "rojano", "row": 0, "col": 0}
     ],
+    "winner": "Empate"
+  },
+  {
+    "id": "3",
+    "type": "online",
+    "playerX": "iban",  
+    "playerO": "pablo",
+    "board": [
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""]
+    ],
+    "moves": [],
     "winner": "-"
   }
 ]

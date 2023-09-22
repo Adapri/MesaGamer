@@ -1,5 +1,9 @@
 const express = require('express')
+const crypto = require('node:crypto')
+
 const tictactoe = require('./tictactoe.json')
+const requestGame = require('./requestGame.json')
+const { validateGame } = require('./schemas/request')
 
 const PORT = 3000
 
@@ -37,6 +41,47 @@ app.get('/tictactoe/:id', (req, res) => {
   if (game) return res.json(game)
 
   res.status(404).json({ message: 'Game not found' })
+})
+
+app.post('/tictactoe', (req, res) => {
+  const result = validateGame(req.body)
+
+  if (result.error) {
+    return res.status(402).json({ error: JSON.parse(result.error.message) })
+  }
+
+  const { user, type } = result.data
+
+  const filteredrequestGames = requestGame.filter(request => {
+    return request.type === type
+  })
+
+  if (filteredrequestGames.length > 0) {
+    const newGame = {
+      id: crypto.randomUUID(),
+      playerX: filteredrequestGames[0].user,
+      playerO: user,
+      board: [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', '']
+      ],
+      moves: [],
+      winner: ''
+    }
+
+    const index = requestGame.findIndex(request => request.user === filteredrequestGames[0].user)
+
+    if (index !== -1) {
+      requestGame.splice(index, 1)
+    }
+
+    tictactoe.push(newGame)
+    res.status(201).json(newGame)
+  } else {
+    requestGame.push({ user, type })
+    res.status(201).json({ message: 'Buscando rival' })
+  }
 })
 
 app.use((req, res) => {
