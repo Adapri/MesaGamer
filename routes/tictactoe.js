@@ -1,29 +1,30 @@
 import { Router } from 'express'
 import { readJSON } from '../utils.js'
-import { randomUUID } from 'node:crypto'
 import { validateRequestGame } from '../schemas/request.js'
 import { validateGame } from '../schemas/tictactoe.js'
+import { TicTacToeModel } from '../models/tictactoe.js'
 
-const tictactoe = readJSON('./tictactoe.json')
 const requestGame = readJSON('./requestGame.json')
 
 export const tictactoeRouter = Router()
 
-tictactoeRouter.get('/', (req, res) => {
+tictactoeRouter.get('/', async (req, res) => {
   res.header('Access-Control-Allow-Origin', '*')
-  res.json(tictactoe)
+  const games = await TicTacToeModel.getAll()
+  res.json(games)
 })
 
-tictactoeRouter.get('/:id', (req, res) => {
+tictactoeRouter.get('/:id', async (req, res) => {
   const { id } = req.params
-  const game = tictactoe.find(game => game.id === id)
 
-  if (game) return res.json(game)
+  const game = await TicTacToeModel.getById({ id })
+
+  if (game) { return res.json(game) }
 
   res.status(404).json({ message: 'Game not found' })
 })
 
-tictactoeRouter.post('/', (req, res) => {
+tictactoeRouter.post('/', async (req, res) => {
   const result = validateRequestGame(req.body)
 
   if (result.error) {
@@ -37,34 +38,25 @@ tictactoeRouter.post('/', (req, res) => {
   })
 
   if (filteredrequestGames.length > 0) {
-    const newGame = {
-      id: randomUUID(),
-      playerX: filteredrequestGames[0].user,
-      playerO: user,
-      board: [
-        ['', '', ''],
-        ['', '', ''],
-        ['', '', '']
-      ],
-      moves: [],
-      winner: ''
-    }
+    const playerX = filteredrequestGames[0].user
+    const playerO = user
 
-    const index = requestGame.findIndex(request => request.user === filteredrequestGames[0].user)
+    const index = requestGame.findIndex(request => request.user === playerX.user)
 
-    if (index < 0) {
+    if (index !== -1) {
       requestGame.splice(index, 1)
     }
 
-    tictactoe.push(newGame)
-    res.status(201).json(newGame)
+    const newGame = await TicTacToeModel.create({ playerX, playerO })
+    console.log(newGame)
+    return res.status(201).json(newGame)
   } else {
     requestGame.push({ user, type })
-    res.status(201).json({ message: 'Buscando rival' })
+    return res.status(201).json({ message: 'Buscando rival' })
   }
 })
 
-tictactoeRouter.patch('/:id', (req, res) => {
+tictactoeRouter.patch('/:id', async (req, res) => {
   const result = validateGame(req.body)
 
   if (result.error) {
@@ -72,20 +64,12 @@ tictactoeRouter.patch('/:id', (req, res) => {
   }
 
   const { id } = req.params
-  const gameIndex = tictactoe.findIndex(game => game.id === id)
+  const input = result
 
-  if (gameIndex < 0) {
+  const updateGame = await TicTacToeModel.update({ id, input })
+
+  if (updateGame === null) {
     return res.status(404).json({ message: 'Partida no encontrada' })
   }
-
-  console.log(gameIndex)
-
-  const updateGame = {
-    ...tictactoe[gameIndex],
-    ...result.data
-  }
-
-  tictactoe[gameIndex] = updateGame
-
   return res.json(updateGame)
 })

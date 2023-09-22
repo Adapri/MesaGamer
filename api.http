@@ -9,7 +9,7 @@ POST http://localhost:3000/tictactoe
 Content-Type: application/json
 
 {
-    "user": "deku",
+    "user": "k",
     "type": "online"
 }
 
