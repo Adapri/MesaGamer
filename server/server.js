@@ -1,4 +1,5 @@
 const express = require('express')
+const crypto = require('node:crypto')
 const tictactoe = require('./tictactoe.json')
 
 const PORT = 3000
@@ -41,6 +42,37 @@ app.get('/tictactoe/:id', (req, res) => {
 
 app.use((req, res) => {
   res.status(404).send('<h1>404</h1>')
+})
+
+app.post('/tictactoe', (req, res) => {
+  const {
+    name
+  } = req.body
+
+  const newGame = {
+    id: crypto.randomUUID(),
+    players: {
+      playerX: {
+        name,
+        symbol: 'X'
+      },
+      playerO: {
+        name: '',
+        symbol: 'O'
+      }
+    },
+    board: [
+      ['', '', ''],
+      ['', '', ''],
+      ['', '', '']
+    ],
+    moves: [],
+    winner: ''
+  }
+
+  tictactoe.push(newGame)
+
+  res.status(201).json(newGame)
 })
 
 app.listen(PORT, () => {
