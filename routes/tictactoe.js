@@ -1,10 +1,8 @@
 import { Router } from 'express'
-import { readJSON } from '../utils.js'
 import { validateRequestGame } from '../schemas/request.js'
 import { validateGame } from '../schemas/tictactoe.js'
 import { TicTacToeModel } from '../models/tictactoe.js'
-
-const requestGame = readJSON('./requestGame.json')
+import { RequestModel } from '../models/request.js'
 
 export const tictactoeRouter = Router()
 
@@ -33,15 +31,13 @@ tictactoeRouter.post('/', async (req, res) => {
 
   const { user, type } = result.data
 
-  const filteredrequestGames = requestGame.filter(request => {
-    return request.type === type
-  })
+  const filteredrequestGames = await RequestModel.getAll({ type })
 
   if (filteredrequestGames.length > 0) {
     const playerX = filteredrequestGames[0].user
     const playerO = user
 
-    const index = requestGame.findIndex(request => request.user === playerX.user)
+    const index = await RequestModel.findIndex({ playerX })
 
     if (index !== -1) {
       requestGame.splice(index, 1)
