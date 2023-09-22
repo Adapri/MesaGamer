@@ -1,4 +1,4 @@
-const zod = require('zod')
+import zod from 'zod'
 
 const requestGameSchema = zod.object(
   {
@@ -7,10 +7,6 @@ const requestGameSchema = zod.object(
   }
 )
 
-function validateRequestGame (object) {
+export function validateRequestGame (object) {
   return requestGameSchema.safeParse(object)
-}
-
-module.exports = {
-  validateRequestGame
 }

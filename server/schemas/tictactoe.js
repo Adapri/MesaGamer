@@ -1,4 +1,4 @@
-const zod = require('zod')
+import zod from 'zod'
 
 const moveSchema = zod.object(
   {
@@ -16,10 +16,6 @@ const tictactoeSchema = zod.object(
   }
 )
 
-function validateGame (object) {
+export function validateGame (object) {
   return tictactoeSchema.safeParse(object)
-}
-
-module.exports = {
-  validateGame
 }

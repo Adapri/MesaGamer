@@ -1,10 +1,12 @@
-const express = require('express')
-const crypto = require('node:crypto')
+import express, { json } from 'express'
+import { randomUUID } from 'node:crypto'
+import { validateRequestGame } from './schemas/request.js'
+import { validateGame } from './schemas/tictactoe.js'
+import { createRequire } from 'node:module'
 
-const tictactoe = require('./tictactoe.json')
+const require = createRequire(import.meta.url)
 const requestGame = require('./requestGame.json')
-const { validateRequestGame } = require('./schemas/request')
-const { validateGame } = require('./schemas/tictactoe')
+const tictactoe = require('./tictactoe.json')
 
 const PORT = process.env.PORT ?? 3000
 
@@ -12,7 +14,7 @@ const app = express()
 
 app.disable('x-powered-by')
 
-app.use(express.json())
+app.use(json())
 
 app.get('/', (req, res) => {
   res.status(200).send('<h1>Mesa Gamer</h1>')
@@ -47,7 +49,7 @@ app.post('/tictactoe', (req, res) => {
 
   if (filteredrequestGames.length > 0) {
     const newGame = {
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       playerX: filteredrequestGames[0].user,
       playerO: user,
       board: [
