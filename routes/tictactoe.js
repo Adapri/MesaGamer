@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { validateRequestGame } from '../schemas/request.js'
+import { validateRequestGame } from '../schemas/requestGame.js'
 import { validateGame } from '../schemas/tictactoe.js'
 import { TicTacToeModel } from '../models/tictactoe.js'
-import { RequestModel } from '../models/request.js'
+import { RequestGameModel } from '../models/requestGame.js'
 
 export const tictactoeRouter = Router()
 
@@ -25,29 +25,32 @@ tictactoeRouter.get('/:id', async (req, res) => {
 tictactoeRouter.post('/', async (req, res) => {
   const result = validateRequestGame(req.body)
 
+  console.log('POST')
+
   if (result.error) {
     return res.status(402).json({ error: JSON.parse(result.error.message) })
   }
 
   const { user, type } = result.data
 
-  const filteredrequestGames = await RequestModel.getAll({ type })
+  const filteredrequestGames = await RequestGameModel.getAll({ type })
 
   if (filteredrequestGames.length > 0) {
     const playerX = filteredrequestGames[0].user
     const playerO = user
 
-    const index = await RequestModel.findIndex({ playerX })
+    const index = await RequestGameModel.findIndex({ playerX })
 
     if (index !== -1) {
-      requestGame.splice(index, 1)
+      await RequestGameModel.delete({ index })
     }
 
     const newGame = await TicTacToeModel.create({ playerX, playerO })
-    console.log(newGame)
+
     return res.status(201).json(newGame)
   } else {
-    requestGame.push({ user, type })
+    await RequestGameModel.create({ user, type })
+
     return res.status(201).json({ message: 'Buscando rival' })
   }
 })

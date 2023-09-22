@@ -1,16 +1,6 @@
-[{
-        "user": "satoru",
-        "type": "IA"
-    },
+[
     {
         "user": "shigaraki",
         "type": "IA"
-    },
-    {
-        "user": "doraemon",
-        "type": "IA"
-    },
-    {
-        "user": "rojano",
-        "type": "IA"
-}]
+    }
+]
