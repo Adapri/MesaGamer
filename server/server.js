@@ -3,9 +3,10 @@ const crypto = require('node:crypto')
 
 const tictactoe = require('./tictactoe.json')
 const requestGame = require('./requestGame.json')
-const { validateGame } = require('./schemas/request')
+const { validateRequestGame } = require('./schemas/request')
+const { validateGame } = require('./schemas/tictactoe')
 
-const PORT = 3000
+const PORT = process.env.PORT ?? 3000
 
 const app = express()
 
@@ -18,19 +19,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/tictactoe', (req, res) => {
-  const { player } = req.query
-
-  if (player) {
-    const filteredGames = tictactoe.filter(game => {
-      const playerXName = game.players.playerX.name.toLowerCase()
-      const playerOName = game.players.playerO.name.toLowerCase()
-      const playerNameToFindLower = player.toLowerCase()
-
-      return playerXName === playerNameToFindLower || playerOName === playerNameToFindLower
-    })
-
-    return res.json(filteredGames)
-  }
+  res.header('Access-Control-Allow-Origin', '*')
   res.json(tictactoe)
 })
 
@@ -44,7 +33,7 @@ app.get('/tictactoe/:id', (req, res) => {
 })
 
 app.post('/tictactoe', (req, res) => {
-  const result = validateGame(req.body)
+  const result = validateRequestGame(req.body)
 
   if (result.error) {
     return res.status(402).json({ error: JSON.parse(result.error.message) })
@@ -72,7 +61,7 @@ app.post('/tictactoe', (req, res) => {
 
     const index = requestGame.findIndex(request => request.user === filteredrequestGames[0].user)
 
-    if (index !== -1) {
+    if (index < 0) {
       requestGame.splice(index, 1)
     }
 
@@ -82,6 +71,32 @@ app.post('/tictactoe', (req, res) => {
     requestGame.push({ user, type })
     res.status(201).json({ message: 'Buscando rival' })
   }
+})
+
+app.patch('/tictactoe/:id', (req, res) => {
+  const result = validateGame(req.body)
+
+  if (result.error) {
+    return res.status(402).json({ error: JSON.parse(result.error.message) })
+  }
+
+  const { id } = req.params
+  const gameIndex = tictactoe.findIndex(game => game.id === id)
+
+  if (gameIndex < 0) {
+    return res.status(404).json({ message: 'Partida no encontrada' })
+  }
+
+  console.log(gameIndex)
+
+  const updateGame = {
+    ...tictactoe[gameIndex],
+    ...result.data
+  }
+
+  tictactoe[gameIndex] = updateGame
+
+  return res.json(updateGame)
 })
 
 app.use((req, res) => {

@@ -7,10 +7,10 @@ const requestGameSchema = zod.object(
   }
 )
 
-function validateGame (object) {
+function validateRequestGame (object) {
   return requestGameSchema.safeParse(object)
 }
 
 module.exports = {
-  validateGame
+  validateRequestGame
 }

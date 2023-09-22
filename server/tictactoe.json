@@ -1,10 +1,10 @@
 [{
-    "id": "1",
+    "id": "c2fc2b9b-e2e8-403d-8437-a1133ceb8249",
     "type": "online",
     "playerX": "adapri",  
     "playerO": "mily",
     "board": [
-      ["X", "", "O"],
+      ["X", "O", "O"],
       ["O", "X", "X"],
       ["O", "X", "O"]
     ],
@@ -20,7 +20,7 @@
     "winner": "Empate"
   },
   {
-    "id": "2",
+    "id": "c3efbb2c-7234-414e-8354-cedfeea78d63",
     "type": "IA",
     "playerX": "rojano",  
     "playerO": "IA",
@@ -32,10 +32,10 @@
     "moves": [
       {"player": "rojano", "row": 0, "col": 0}
     ],
-    "winner": "Empate"
+    "winner": ""
   },
   {
-    "id": "3",
+    "id": "b6bda1f3-1faa-42c6-b8c4-7e555ffd6291",
     "type": "online",
     "playerX": "iban",  
     "playerO": "pablo",
@@ -45,7 +45,7 @@
       ["", "", ""]
     ],
     "moves": [],
-    "winner": "-"
+    "winner": ""
   }
 ]
   
