@@ -22,8 +22,6 @@ export class RequestGameModel {
       user,
       type
     }
-
-    console.log(newRequest)
     requestGame.push(newRequest)
   }
 
